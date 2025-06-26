@@ -1,9 +1,19 @@
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./UserItem";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Item } from "./Item";
+import { toast } from "sonner";
 
 export const Navigation = () => {
   const pathName = usePathname();
@@ -13,6 +23,8 @@ export const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const getDocuments = useQuery(api.documents.getAll);
+  const create = useMutation(api.documents.create);
 
   useEffect(() => {
     if (isMobile) {
@@ -35,6 +47,22 @@ export const Navigation = () => {
     isResizingRef.current = true;
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const onCreate = () => {
+    const newDoc = create({
+      title: "New Note",
+    });
+
+    toast.promise(newDoc, {
+      loading: "Creating note...",
+      success: () => {
+        return "Note created successfully!";
+      },
+      error: (error) => {
+        return `Error creating note: ${error.message}`;
+      },
+    });
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -124,9 +152,12 @@ export const Navigation = () => {
         </div>
         <div>
           <UserItem />
+          <Item label="Search" icon={Search} isSearching onclick={() => {}} />
+          <Item label="Settings" icon={Settings} onclick={() => {}} />
+          <Item onclick={onCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          {getDocuments?.map((doc) => <p key={doc._id}>{doc.title}</p>)}
         </div>
         <div
           onMouseDown={handleMouseDown}
