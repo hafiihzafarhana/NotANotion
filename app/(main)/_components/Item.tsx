@@ -1,10 +1,15 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+import { useMutation } from "convex/react";
+import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-interface ItemProps {
+interface ItemInterface {
   id?: Id<"documents">;
   documentIcon?: string;
   active?: boolean;
@@ -28,13 +33,47 @@ export const Item = ({
   icon: Icon,
   label,
   onclick,
-}: ItemProps) => {
+}: ItemInterface) => {
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+  const router = useRouter();
+  const create = useMutation(api.documents.create);
+  const handleExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    if (onExpand) {
+      onExpand();
+    }
+  };
+
+  const handleSubCreate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!id) return;
+    e.stopPropagation();
+    const newDoc = create({
+      title: "New Note",
+      parentDocument: id,
+    }).then((doc) => {
+      if (!expanded) {
+        onExpand?.();
+      }
+
+      // router.push(`/documents/${doc}`);
+    });
+
+    toast.promise(newDoc, {
+      loading: "Creating note...",
+      success: () => {
+        return "Note created successfully!";
+      },
+      error: (error) => {
+        return `Error creating note: ${error.message}`;
+      },
+    });
+  };
+
   return (
     <div
       onClick={onclick}
       role="button"
-      style={{ paddingLeft: level ? `${level + 12 + 12}px` : "12px" }}
+      style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
         "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
         active && "bg-primary/5 text-primary"
@@ -43,7 +82,7 @@ export const Item = ({
       {!!id && (
         <div
           role="button"
-          onClick={() => {}}
+          onClick={handleExpand}
           className="h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600 mr-1 "
         >
           <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
@@ -60,6 +99,29 @@ export const Item = ({
           <span className="text-xs">K</span>
         </kbd>
       )}
+      {!!id && (
+        <div className="ml-auto flex items-center gap-x-2">
+          <div
+            role="button"
+            onClick={handleSubCreate}
+            className="opacity-0 group-hover:opacity-100 transition h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+          >
+            <Plus className="h-4 w-4 text-muted-foreground " />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{ paddingLeft: level ? `${level * 12 + 25}px` : "12px" }}
+      className="flex gap-x-2 py-[3px]"
+    >
+      <Skeleton className="h-4 w-4" />
+      <Skeleton className="h-4 w-[30%]" />
     </div>
   );
 };
