@@ -99,3 +99,94 @@ export const archive = mutation({
     return doc;
   },
 });
+
+export const getTrash = query({
+  handler: async (ctx) => {
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    const userId = user.subject;
+
+    return await ctx.db
+      .query("documents")
+      .withIndex("byUserId", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .order("desc")
+      .collect();
+  },
+});
+
+export const restore = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const { id } = args;
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    const userId = user.subject;
+    const document = await ctx.db.get(id);
+    if (!document) {
+      throw new Error("Document not found");
+    }
+    if (document.userId !== userId) {
+      throw new Error("User not authorized");
+    }
+
+    const recursiveRestore = async (docId: Id<"documents">) => {
+      const children = await ctx.db
+        .query("documents")
+        .withIndex("byUserIdParentDocument", (q) =>
+          q.eq("parentDocument", docId).eq("userId", userId)
+        )
+        .collect();
+
+      for (const child of children) {
+        await ctx.db.patch(child._id, { isArchived: false });
+        await recursiveRestore(child._id);
+      }
+    };
+
+    //Membuat sebuah tipe data menjadi "?" atau opsional
+    const option: Partial<Doc<"documents">> = {
+      isArchived: false,
+    };
+
+    if (document.parentDocument) {
+      const parent = await ctx.db.get(document.parentDocument);
+      if (parent?.isArchived) {
+        option.parentDocument = undefined;
+      }
+    }
+
+    const updatedDoc = await ctx.db.patch(id, option);
+    await recursiveRestore(id);
+    return updatedDoc;
+  },
+});
+
+export const remove = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
+    const { id } = args;
+    const user = await ctx.auth.getUserIdentity();
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+    const userId = user.subject;
+    const document = await ctx.db.get(id);
+    if (!document) {
+      throw new Error("Document not found");
+    }
+    if (document.userId !== userId) {
+      throw new Error("User not authorized");
+    }
+
+    return ctx.db.delete(document._id);
+  },
+});
