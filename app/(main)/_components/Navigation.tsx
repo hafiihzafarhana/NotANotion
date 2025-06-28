@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import {
   ChevronsLeft,
   MenuIcon,
+  Plus,
   PlusCircle,
   Search,
   Settings,
@@ -158,6 +159,7 @@ export const Navigation = () => {
         </div>
         <div className="mt-4">
           <DocumentListItems />
+          <Item onclick={onCreate} icon={Plus} label="Add a page" />
         </div>
         <div
           onMouseDown={handleMouseDown}
