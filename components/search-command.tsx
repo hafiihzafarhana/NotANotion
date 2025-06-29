@@ -55,7 +55,7 @@ export function SearchCommand() {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
-      <CommandInput placeholder={`Search {user?.fullName}'s NotANotion`} />
+      <CommandInput placeholder={`Search ${user?.fullName}'s NotANotion`} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">

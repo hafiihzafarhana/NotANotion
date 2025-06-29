@@ -8,7 +8,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./UserItem";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/popover";
 import { TrashBox } from "./TrashBox";
 import { useSearch } from "@/hooks/use-search";
+import { useSetting } from "@/hooks/use-setting";
 
 export const Navigation = () => {
   const pathName = usePathname();
@@ -35,6 +36,8 @@ export const Navigation = () => {
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
   const create = useMutation(api.documents.create);
   const search = useSearch();
+  const settings = useSetting();
+  const params = useParams();
 
   useEffect(() => {
     if (isMobile) {
@@ -162,8 +165,13 @@ export const Navigation = () => {
         </div>
         <div>
           <UserItem />
-          <Item label="Search" icon={Search} isSearching onclick={() => {}} />
-          <Item label="Settings" icon={Settings} onclick={() => {}} />
+          <Item
+            label="Search"
+            icon={Search}
+            isSearching
+            onclick={search.onOpen}
+          />
+          <Item label="Settings" icon={Settings} onclick={settings.onOpen} />
           <Item onclick={onCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">

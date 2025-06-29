@@ -5,13 +5,13 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useMutation } from "convex/react";
 import {
   Archive,
@@ -152,15 +152,12 @@ export const Item = ({
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-60"
+              className="w-60 "
               align="start"
               side="right"
               forceMount
             >
-              <DropdownMenuItem
-                className="flex flex-row items-center"
-                onClick={handleArchive}
-              >
+              <DropdownMenuItem onClick={handleArchive}>
                 <Trash className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
