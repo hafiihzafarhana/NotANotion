@@ -23,6 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TrashBox } from "./TrashBox";
+import { useSearch } from "@/hooks/use-search";
 
 export const Navigation = () => {
   const pathName = usePathname();
@@ -33,6 +34,7 @@ export const Navigation = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
   const create = useMutation(api.documents.create);
+  const search = useSearch();
 
   useEffect(() => {
     if (isMobile) {
