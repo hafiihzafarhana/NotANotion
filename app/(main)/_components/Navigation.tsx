@@ -25,6 +25,7 @@ import {
 import { TrashBox } from "./TrashBox";
 import { useSearch } from "@/hooks/use-search";
 import { useSetting } from "@/hooks/use-setting";
+import { Navbar } from "./Navbar";
 
 export const Navigation = () => {
   const pathName = usePathname();
@@ -200,15 +201,19 @@ export const Navigation = () => {
         )}
         ref={navbarRef}
       >
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              className="h-6 w-6 text-muted-foreground"
-              role="button"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                className="h-6 w-6 text-muted-foreground"
+                role="button"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
