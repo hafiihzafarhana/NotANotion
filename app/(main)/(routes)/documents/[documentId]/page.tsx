@@ -1,5 +1,6 @@
 "use client";
 
+import { CoverImageModal } from "@/components/cover";
 import { ToolBar } from "@/components/tool-bar";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -32,7 +33,7 @@ const DocumentIdPage = ({
 
   return (
     <div className="pb-40">
-      <div className="h-[35vh]" />
+      <CoverImageModal url={getDocument.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <ToolBar initialData={getDocument} />
       </div>
