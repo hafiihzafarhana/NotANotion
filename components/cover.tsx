@@ -70,5 +70,5 @@ export const CoverImageModal = ({ url, preview }: CoverImageModalInterface) => {
 };
 
 CoverImageModal.Skeleton = function CoverImageModalSkeleton() {
-  return <Skeleton />;
+  return <Skeleton className="w-full h-[12vh]" />;
 };
