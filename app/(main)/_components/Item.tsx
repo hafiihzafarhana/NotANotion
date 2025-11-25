@@ -68,12 +68,12 @@ export const Item = ({
     const newDoc = create({
       title: "New Note",
       parentDocument: id,
-    }).then((doc) => {
+    }).then((docId) => {
       if (!expanded) {
         onExpand?.();
       }
 
-      // router.push(`/documents/${doc}`);
+      router.push(`/documents/${docId}`);
     });
 
     toast.promise(newDoc, {
@@ -92,6 +92,8 @@ export const Item = ({
     e.stopPropagation();
     const archiveDoc = archive({
       documentId: id,
+    }).then(() => {
+      router.push(`/documents/`);
     });
 
     toast.promise(archiveDoc, {

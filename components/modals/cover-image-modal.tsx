@@ -28,7 +28,6 @@ export const CoverImageModal = () => {
   const uploadFn: UploadFn = React.useCallback(
     async ({ file, onProgressChange, signal }) => {
       const oldCover = coverImage.url; // cover image lama yg tersimpan
-      console.log("Old cover image URL:", coverImage, oldCover);
       // 1. Upload file baru
       const res = await edgestore.publicFiles.upload({
         file,

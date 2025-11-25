@@ -1,11 +1,12 @@
 "use client";
 
 import { CoverImageModal } from "@/components/cover";
+import { Editor } from "@/components/editor";
 import { ToolBar } from "@/components/tool-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { use } from "react";
 
 interface DocumentIdPageInterface {
@@ -23,6 +24,14 @@ const DocumentIdPage = ({
   const getDocument = useQuery(api.documents.getById, {
     id: documentId,
   });
+  const updateDoc = useMutation(api.documents.updateDoc);
+
+  const onChange = (content: string) => {
+    updateDoc({
+      id: documentId,
+      content,
+    });
+  };
 
   if (getDocument === undefined) {
     return (
@@ -58,6 +67,7 @@ const DocumentIdPage = ({
       <CoverImageModal url={getDocument.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <ToolBar initialData={getDocument} />
+        <Editor onChange={onChange} initialContent={getDocument.content} />
       </div>
     </div>
   );

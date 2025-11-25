@@ -30,6 +30,8 @@ export const Menu = ({ docId }: MenuInterface) => {
     if (!docId) return;
     const archiveDoc = archive({
       documentId: docId,
+    }).then(() => {
+      router.push(`/documents/`);
     });
 
     toast.promise(archiveDoc, {

@@ -24,7 +24,6 @@ export const CoverImageModal = ({ url, preview }: CoverImageModalInterface) => {
   const { edgestore } = useEdgeStore();
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
   const onRemoveCoverImage = async () => {
-    console.log(params.documentId);
     removeCoverImage({
       id: params.documentId as Id<"documents">,
     });

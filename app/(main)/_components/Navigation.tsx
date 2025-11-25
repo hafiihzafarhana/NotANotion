@@ -8,7 +8,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { UserItem } from "./UserItem";
@@ -39,6 +39,7 @@ export const Navigation = () => {
   const search = useSearch();
   const settings = useSetting();
   const params = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (isMobile) {
@@ -66,7 +67,7 @@ export const Navigation = () => {
   const onCreate = () => {
     const newDoc = create({
       title: "New Note",
-    });
+    }).then((docId) => router.push(`/documents/${docId}`));
 
     toast.promise(newDoc, {
       loading: "Creating note...",
