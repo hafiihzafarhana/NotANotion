@@ -14,7 +14,7 @@ interface EditorInterface {
   editable?: boolean;
 }
 
-export const Editor = ({
+const Editor = ({
   onChange,
   initialContent,
   editable = true,
@@ -39,7 +39,7 @@ export const Editor = ({
   const editor = useCreateBlockNote({
     initialContent: parsedInitialContent,
     animations: true,
-    autofocus: true,
+    // autofocus: true,
     uploadFile: handleUpload,
   });
 
@@ -55,3 +55,5 @@ export const Editor = ({
     />
   );
 };
+
+export default Editor;

@@ -73,10 +73,14 @@ const DocumentIdPage = ({
 
   return (
     <div className="pb-40">
-      <CoverImageModal url={getDocument.coverImage} />
+      <CoverImageModal preview url={getDocument.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <ToolBar initialData={getDocument} />
-        <Editor onChange={onChange} initialContent={getDocument.content} />
+        <ToolBar preview initialData={getDocument} />
+        <Editor
+          editable={false}
+          onChange={onChange}
+          initialContent={getDocument.content}
+        />
       </div>
     </div>
   );

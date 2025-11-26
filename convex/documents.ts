@@ -221,11 +221,14 @@ export const getById = query({
       throw new Error("Document not found");
     }
 
-    if (document.isPublished && !document.isArchived) return document;
-
+    if (!document.isArchived && document.isPublished) {
+      // Public document
+      return document;
+    }
     if (!user) {
       throw new Error("User not authenticated");
     }
+
     const userId = user.subject;
 
     if (document.userId !== userId) {
