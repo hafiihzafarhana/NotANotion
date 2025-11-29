@@ -1,4 +1,5 @@
-import { Navbar } from "./_components/Navbar";
+"use client";
+import { Navbar } from "@/app/(marketing)/_components/Navbar";
 
 const MarketingLayout = ({ children }: { children: React.ReactNode }) => {
   return (

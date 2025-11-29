@@ -1,6 +1,6 @@
-import { Footer } from "./_components/Footer";
-import { Heading } from "./_components/Heading";
-import { Heroes } from "./_components/Heroes";
+import { Footer } from "@/app/(marketing)/_components/Footer";
+import { Heading } from "@/app/(marketing)/_components/Heading";
+import { Heroes } from "@/app/(marketing)/_components/Heroes";
 const MarketingPage = () => {
   return (
     <div className="min-h-full flex flex-col">

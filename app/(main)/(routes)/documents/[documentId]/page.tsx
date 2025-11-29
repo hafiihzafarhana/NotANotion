@@ -1,7 +1,6 @@
 "use client";
 
 import { CoverImageModal } from "@/components/cover";
-import Editor from "@/components/editor";
 import { ToolBar } from "@/components/tool-bar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";

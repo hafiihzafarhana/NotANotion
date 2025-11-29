@@ -1,25 +1,28 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import {
   AlertCircleIcon,
   Trash2Icon,
   UploadCloudIcon,
   XIcon,
-} from 'lucide-react';
-import * as React from 'react';
-import { useDropzone, type DropzoneOptions } from 'react-dropzone';
-import { ProgressCircle } from './progress-circle';
-import { formatFileSize, useUploader } from './uploader-provider';
+} from "lucide-react";
+import * as React from "react";
+import { useDropzone, type DropzoneOptions } from "react-dropzone";
+import { ProgressCircle } from "@/components/upload/progress-circle";
+import {
+  formatFileSize,
+  useUploader,
+} from "@/components/upload/uploader-provider";
 
 const DROPZONE_VARIANTS = {
-  base: 'relative rounded-md p-4 flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border-2 border-dashed border-muted-foreground transition-colors duration-200 ease-in-out',
-  image: 'border-0 p-0 min-h-0 min-w-0 relative bg-muted shadow-md',
-  active: 'border-primary',
+  base: "relative rounded-md p-4 flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border-2 border-dashed border-muted-foreground transition-colors duration-200 ease-in-out",
+  image: "border-0 p-0 min-h-0 min-w-0 relative bg-muted shadow-md",
+  active: "border-primary",
   disabled:
-    'bg-muted/50 border-muted-foreground/50 cursor-default pointer-events-none',
-  accept: 'border-primary bg-primary/10',
-  reject: 'border-destructive bg-destructive/10',
+    "bg-muted/50 border-muted-foreground/50 cursor-default pointer-events-none",
+  accept: "border-primary bg-primary/10",
+  reject: "border-destructive bg-destructive/10",
 };
 
 /**
@@ -51,7 +54,7 @@ export interface SingleImageDropzoneProps
    */
   dropzoneOptions?: Omit<
     DropzoneOptions,
-    'disabled' | 'onDrop' | 'maxFiles' | 'multiple'
+    "disabled" | "onDrop" | "maxFiles" | "multiple"
   >;
 }
 
@@ -101,12 +104,12 @@ const SingleImageDropzone = React.forwardRef<
   const displayUrl = tempUrl ?? fileState?.url;
   const isDisabled =
     !!disabled ||
-    fileState?.status === 'UPLOADING' ||
-    fileState?.status === 'COMPLETE'; // Disable when upload complete
+    fileState?.status === "UPLOADING" ||
+    fileState?.status === "COMPLETE"; // Disable when upload complete
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
-      accept: { 'image/*': [] }, // Accept only image files
+      accept: { "image/*": [] }, // Accept only image files
       multiple: false,
       disabled: isDisabled,
       onDrop: (acceptedFiles, rejectedFiles) => {
@@ -120,12 +123,12 @@ const SingleImageDropzone = React.forwardRef<
 
             // User-friendly error messages
             const messages: Record<string, string> = {
-              'file-too-large': `The file is too large. Max size is ${formatFileSize(
-                maxSize ?? 0,
+              "file-too-large": `The file is too large. Max size is ${formatFileSize(
+                maxSize ?? 0
               )}.`,
-              'file-invalid-type': 'Invalid file type.',
-              'too-many-files': 'You can only upload one file.',
-              default: 'The file is not supported.',
+              "file-invalid-type": "Invalid file type.",
+              "too-many-files": "You can only upload one file.",
+              default: "The file is not supported.",
             };
 
             setError(messages[code] ?? messages.default);
@@ -154,9 +157,9 @@ const SingleImageDropzone = React.forwardRef<
         displayUrl && DROPZONE_VARIANTS.image,
         isDragReject && DROPZONE_VARIANTS.reject,
         isDragAccept && DROPZONE_VARIANTS.accept,
-        className,
+        className
       ),
-    [isFocused, isDisabled, displayUrl, isDragAccept, isDragReject, className],
+    [isFocused, isDisabled, displayUrl, isDragAccept, isDragReject, className]
   );
 
   // Combined error message from dropzone or file state
@@ -179,14 +182,14 @@ const SingleImageDropzone = React.forwardRef<
           <img
             className="h-full w-full rounded-md object-cover"
             src={displayUrl}
-            alt={fileState?.file.name ?? 'uploaded image'}
+            alt={fileState?.file.name ?? "uploaded image"}
           />
         ) : (
           // Placeholder content shown when no image is selected
           <div
             className={cn(
-              'flex flex-col items-center justify-center gap-2 text-center text-xs text-muted-foreground',
-              isDisabled && 'opacity-50',
+              "flex flex-col items-center justify-center gap-2 text-center text-xs text-muted-foreground",
+              isDisabled && "opacity-50"
             )}
           >
             <UploadCloudIcon className="mb-1 h-7 w-7" />
@@ -200,7 +203,7 @@ const SingleImageDropzone = React.forwardRef<
         )}
 
         {/* Upload progress overlay */}
-        {displayUrl && fileState?.status === 'UPLOADING' && (
+        {displayUrl && fileState?.status === "UPLOADING" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center rounded-md bg-black/70">
             <ProgressCircle progress={fileState.progress} />
           </div>
@@ -210,13 +213,13 @@ const SingleImageDropzone = React.forwardRef<
         {displayUrl &&
           !disabled &&
           fileState &&
-          fileState.status !== 'COMPLETE' && (
+          fileState.status !== "COMPLETE" && (
             <button
               type="button"
               className="group pointer-events-auto absolute right-1 top-1 z-10 transform rounded-full border border-muted-foreground bg-background p-1 shadow-md transition-all hover:scale-110"
               onClick={(e) => {
                 e.stopPropagation(); // Prevent triggering dropzone click
-                if (fileState.status === 'UPLOADING') {
+                if (fileState.status === "UPLOADING") {
                   cancelUpload(fileState.key);
                 } else {
                   removeFile(fileState.key);
@@ -224,7 +227,7 @@ const SingleImageDropzone = React.forwardRef<
                 }
               }}
             >
-              {fileState.status === 'UPLOADING' ? (
+              {fileState.status === "UPLOADING" ? (
                 <XIcon className="block h-4 w-4 text-muted-foreground" />
               ) : (
                 <Trash2Icon className="block h-4 w-4 text-muted-foreground" />
@@ -243,6 +246,6 @@ const SingleImageDropzone = React.forwardRef<
     </div>
   );
 });
-SingleImageDropzone.displayName = 'SingleImageDropzone';
+SingleImageDropzone.displayName = "SingleImageDropzone";
 
 export { SingleImageDropzone };

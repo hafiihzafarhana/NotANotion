@@ -2,7 +2,7 @@
 
 import { useCoverImage } from "@/hooks/use-cover-image";
 import React from "react";
-import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { SingleImageDropzone } from "@/components/upload/single-image";
 import {

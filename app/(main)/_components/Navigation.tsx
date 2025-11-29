@@ -11,21 +11,21 @@ import {
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { UserItem } from "./UserItem";
+import { UserItem } from "@/app/(main)/_components/UserItem";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Item } from "./Item";
+import { Item } from "@/app/(main)/_components/Item";
 import { toast } from "sonner";
-import { DocumentListItems } from "./DocumentListItems";
+import { DocumentListItems } from "@/app/(main)/_components/DocumentListItems";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TrashBox } from "./TrashBox";
+import { TrashBox } from "@/app/(main)/_components/TrashBox";
 import { useSearch } from "@/hooks/use-search";
 import { useSetting } from "@/hooks/use-setting";
-import { Navbar } from "./Navbar";
+import { Navbar } from "@/app/(main)/_components/Navbar";
 
 export const Navigation = () => {
   const pathName = usePathname();
